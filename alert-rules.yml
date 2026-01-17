@@ -1,0 +1,51 @@
+groups:
+  - name: jvm-alerts
+    rules:
+      - alert: JvmDown
+        expr: up{job="spring-boot-app"} == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "JVM is down"
+          description: "Spring Boot application JVM is not reachable."
+
+  - name: cpu-alerts
+    rules:
+      - alert: CpuHighUsage
+        expr: process_cpu_usage > 0.8
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage has been above 80% for 30 seconds."
+
+      - alert: CpuSpikeDetected
+        expr: increase(process_cpu_usage[10s]) > 0.3
+        for: 0s
+        labels:
+          severity: info
+        annotations:
+          summary: "CPU spike detected"
+          description: "CPU usage increased sharply in a short time."
+
+  - name: memory-alerts
+    rules:
+      - alert: RamHighUsage
+        expr: (jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"}) > 0.85
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "High RAM usage"
+          description: "JVM heap usage exceeded 85%."
+
+      - alert: RamSpikeDetected
+        expr: increase(jvm_memory_used_bytes{area="heap"}[10s]) > 100 * 1024 * 1024
+        for: 0s
+        labels:
+          severity: info
+        annotations:
+          summary: "RAM spike detected"
+          description: "Heap usage increased rapidly."

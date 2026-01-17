@@ -1,0 +1,18 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'uditsaini1892@gmail.com'
+  smtp_auth_username: 'uditsaini1892@gmail.com'
+  smtp_auth_password: 'ccciupyawyfzzwvb'
+  smtp_require_tls: true
+
+route:
+  receiver: 'email-notifications'
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+
+receivers:
+  - name: 'email-notifications'
+    email_configs:
+      - to: 'baderavarshit01@gmail.com'
+        send_resolved: true
